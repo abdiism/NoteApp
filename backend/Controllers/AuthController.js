@@ -1,7 +1,8 @@
 import e from "express";
 import dotenv from "dotenv";
-import User from "../models/User.js";
+import { User } from "../models/User.js";
 import multer from "multer";
+
 import cloudinary from "cloudinary";
 import bcrypt from "bcrypt";
 
@@ -42,8 +43,9 @@ const signup = async (req, res) => {
     const encryptedPassword = await bcrypt.hash(password, salt);
     console.log("Request Body : ", req.body);
 
-    //imika dbka an galino
-    const newUser = newUser({
+    //imika dbka an galino ,,marka dta da kaso qaaday userkaweye
+
+    const newUser = User({
       firstName,
       lastName,
       userBio,
@@ -66,4 +68,37 @@ const signup = async (req, res) => {
   }
 };
 
-export default { signup };
+//imika aan sameno loginka
+const login = async (req, res) => {
+  try {
+    //login with email n pass
+    const { userEmail, userPassword } = req.body;
+    const user = await User.findOne({ userEmail }); //qof imalka wata  raadi
+    if (user) {
+      const passwordMatch = await bcrypt.compare(
+        userPassword,
+        user.userPassword
+      );
+      if (passwordMatch) {
+        return res.json(user);
+      } else {
+        return res.json({
+          status: "Error password  is incorrect ",
+          getUser: false,
+        });
+      }
+    } else {
+      return res.json({
+        status: "Error email is  incorect",
+        getUser: false,
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      error: error.message,
+    });
+    console.log(error);
+  }
+};
+
+export default { signup, login };
