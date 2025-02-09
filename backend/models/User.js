@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { MongoClient } from "mongodb";
 //aan sameeno schemas ka
 const userSchema = mongoose.Schema({
   firstName: {
@@ -35,5 +36,5 @@ const userSchema = mongoose.Schema({
   },
 });
 
-const userModel = mongoose.Model("User", userSchema);
-export { userModel };
+const User = mongoose.model("User", userSchema);
+export { User };
