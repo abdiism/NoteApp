@@ -21,6 +21,6 @@ const upload = multer({
 //creating routes
 
 router.post("/upload", upload.single("file", NotesController.uploadNote));
-// router.get("/getFiles", NotesController.getNote);
-// router.get("/getFiles/:id", NotesController.getNoteByID);
+router.get("/getFiles", NotesController.getNote);
+router.get("/getFiles/:id", NotesController.getNoteByID);
 export default router;
